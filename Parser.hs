@@ -39,6 +39,11 @@ parseStmt =
 --   <|> V   <$> identifier
 --   <|> Plus
 
-parseExp = undefined
+parseExp =
+  Lit <$> parseNat
+  <|> V <$> identifier
+  <|> Plus <$> parseExp <*> (symbol "+" *> parseExp)
+  <|> Minus <$> parseExp <*> (symbol "-" *> parseExp)
+  <|> Times <$> parseExp <*> (symbol "*" *> parseExp)
 
 parseBExp = undefined
