@@ -1,7 +1,7 @@
 module Parser where
 
 import Control.Applicative hiding (many)
-import ImpLang
+import ItLang
 
 import Text.Parsec
 import qualified Text.Parsec.Token as P
