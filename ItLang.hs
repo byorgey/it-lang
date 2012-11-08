@@ -55,7 +55,8 @@ execStmt = undefined
 ------------------------------------------------------------
 
 execProg :: Prog -> Mem -> Mem
-execProg = undefined
+execProg [] m = m
+execProg (x:xs) m = execProg xs (execStmt x m)
 
 ------------------------------------------------------------
 
