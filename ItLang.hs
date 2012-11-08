@@ -40,22 +40,27 @@ type Mem = M.Map Var Nat
 ------------------------------------------------------------
 
 evalExp :: Exp -> Mem -> Nat
+evalExp = undefined
 
 ------------------------------------------------------------
 
 evalBExp :: BExp -> Mem -> Bool
+evalBExp = undefined
 
 ------------------------------------------------------------
 
 execStmt :: Stmt -> Mem -> Mem
+execStmt = undefined
 
 ------------------------------------------------------------
 
 execProg :: Prog -> Mem -> Mem
+execProg = undefined
 
 ------------------------------------------------------------
 
 execRepeat :: Nat -> Stmt -> Mem -> Mem
+execRepeat = undefined
 
 ------------------------------------------------------------
 
