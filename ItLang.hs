@@ -51,7 +51,7 @@ sub x Z         = x
 sub _ _         = Z
 
 -- | Multiply two natural numbers.
-sub :: Nat -> Nat -> Nat
+mul :: Nat -> Nat -> Nat
 mul (S x) y = add y (mul x y)
 mul Z y     = Z
 
