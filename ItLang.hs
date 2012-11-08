@@ -10,7 +10,7 @@ type Var = String
 data Nat where
   Z :: Nat
   S :: Nat -> Nat
-  deriving (Eq, Ord)
+  deriving (Show, Eq, Ord)
 
 type Prog = [Stmt]
 
@@ -39,21 +39,28 @@ type Mem = M.Map Var Nat
 
 ------------------------------------------------------------
 
+-- | Add two natural numbers.
 add :: Nat -> Nat -> Nat
-add Z y     = y
 add (S x) y = S (add x y)
+add Z y     = y
 
+-- | Subtract a second natural number from a first.
+sub :: Nat -> Nat -> Nat
+sub (S x) (S y) = sub x y
+sub x Z         = x
+sub _ _         = Z
 
+-- | Multiply two natural numbers.
+mul (S x) y = add y (mul x y)
+mul Z y     = Z
+
+-- | Evaluate an IT expression using the given memory store.
 evalExp :: Exp -> Mem -> Nat
-evalExp (Lit n) _ = n
+evalExp (Lit n) _     = n
 evalExp (V v) m       = memLookup v m
 evalExp (Plus x y) m  = add (evalExp x m) (evalExp y m)
-evalExp (Minus x y) m = sub (evalExp x m) (evalExp y m) where
-  sub Z y     = y
-  sub (S x) y = sub x y
-evalExp (Times x y) m = mul (evalExp x m) (evalExp y m) where
-  mul Z y     = Z
-  mul (S x) y = add y (mul x y)
+evalExp (Minus x y) m = sub (evalExp x m) (evalExp y m)
+evalExp (Times x y) m = mul (evalExp x m) (evalExp y m)
 
 
 ------------------------------------------------------------
