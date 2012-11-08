@@ -39,8 +39,22 @@ type Mem = M.Map Var Nat
 
 ------------------------------------------------------------
 
+add :: Nat -> Nat -> Nat
+add Z y     = y
+add (S x) y = S (add x y)
+
+
 evalExp :: Exp -> Mem -> Nat
-evalExp = undefined
+evalExp (Lit n) _ = n
+evalExp (V v) m       = memLookup v m
+evalExp (Plus x y) m  = add (evalExp x m) (evalExp y m)
+evalExp (Minus x y) m = sub (evalExp x m) (evalExp y m) where
+  sub Z y     = y
+  sub (S x) y = sub x y
+evalExp (Times x y) m = mul (evalExp x m) (evalExp y m) where
+  mul Z y     = Z
+  mul (S x) y = add y (mul x y)
+
 
 ------------------------------------------------------------
 
@@ -66,4 +80,4 @@ execRepeat = undefined
 
 -- M.insert :: Var -> Nat -> Mem -> Mem
 
-memLookup v m = fromMaybe 0 (M.lookup v m)
+memLookup v m = fromMaybe Z (M.lookup v m)
