@@ -45,7 +45,12 @@ evalExp = undefined
 ------------------------------------------------------------
 
 evalBExp :: BExp -> Mem -> Bool
-evalBExp = undefined
+evalBExp (BLit b)       mem = b
+evalBExp (Eq exp1 exp2) mem = (evalExp exp1 mem) == (evalExp exp2 mem)
+evalBExp (Lt exp1 exp2) mem = (evalExp exp1 mem) < (evalExp exp2 mem)
+evalBExp (Not exp)      mem = not (evalBExp exp mem)
+evalBExp (Or exp1 exp2) mem = (evalBExp exp1 mem) || (evalBExp exp2 mem)
+evalBExp (And exp1 exp2) mem = (evalBExp exp1 mem) && (evalBExp exp2 mem)
 
 ------------------------------------------------------------
 
