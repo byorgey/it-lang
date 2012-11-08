@@ -59,10 +59,10 @@ execProg [] m = m
 execProg (x:xs) m = execProg xs (execStmt x m)
 
 ------------------------------------------------------------
-
 execRepeat :: Nat -> Stmt -> Mem -> Mem
-execRepeat = undefined
-
+execRepeat Z _ mem = mem
+execRepeat n st mem = execRepeat minus1 st $ execStmt st mem where
+  minus1 = (evalExp (Minus (Lit n) (Lit (S Z))) mem)
 ------------------------------------------------------------
 
 -- M.insert :: Var -> Nat -> Mem -> Mem
