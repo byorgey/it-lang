@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wall #-}
+
 {-# LANGUAGE GADTs #-}
 
 module ItLang where
@@ -50,8 +52,18 @@ evalBExp = undefined
 ------------------------------------------------------------
 
 execStmt :: Stmt -> Mem -> Mem
-execStmt = undefined
-
+execStmt (Assign v e) m = M.insert v value m where
+  value = evalExp e m
+execStmt (Block []) m = m
+execStmt (Block (x:xs)) m = execStmt rest cur where
+  rest = Block xs
+  cur = execStmt x m
+execStmt (If bexp s1 s2) m
+  | evalBExp bexp m = execStmt s1 m
+  | otherwise = execStmt s2 m
+execStmt (Repeat e s) m = execRepeat repeatTimes s m where
+  repeatTimes = evalExp e m
+                            
 ------------------------------------------------------------
 
 execProg :: Prog -> Mem -> Mem
@@ -66,4 +78,5 @@ execRepeat = undefined
 
 -- M.insert :: Var -> Nat -> Mem -> Mem
 
+memLookup :: (Num a, Ord k) => k -> M.Map k a -> a
 memLookup v m = fromMaybe 0 (M.lookup v m)
