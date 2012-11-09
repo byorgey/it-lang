@@ -10,7 +10,7 @@ type Var = String
 data Nat where
   Z :: Nat
   S :: Nat -> Nat
-  deriving (Eq, Ord)
+  deriving (Show, Eq, Ord)
 
 type Prog = [Stmt]
 
@@ -39,8 +39,30 @@ type Mem = M.Map Var Nat
 
 ------------------------------------------------------------
 
+-- | Add two natural numbers.
+add :: Nat -> Nat -> Nat
+add (S x) y = S (add x y)
+add Z y     = y
+
+-- | Subtract a second natural number from a first.
+sub :: Nat -> Nat -> Nat
+sub (S x) (S y) = sub x y
+sub x Z         = x
+sub _ _         = Z
+
+-- | Multiply two natural numbers.
+mul :: Nat -> Nat -> Nat
+mul (S x) y = add y (mul x y)
+mul Z y     = Z
+
+-- | Evaluate an IT expression using the given memory store.
 evalExp :: Exp -> Mem -> Nat
-evalExp = undefined
+evalExp (Lit n) _     = n
+evalExp (V v) m       = memLookup v m
+evalExp (Plus x y) m  = add (evalExp x m) (evalExp y m)
+evalExp (Minus x y) m = sub (evalExp x m) (evalExp y m)
+evalExp (Times x y) m = mul (evalExp x m) (evalExp y m)
+
 
 ------------------------------------------------------------
 
@@ -82,4 +104,4 @@ execRepeat n st mem = execRepeat minus1 st $ execStmt st mem where
 
 -- M.insert :: Var -> Nat -> Mem -> Mem
 
-memLookup v m = fromMaybe 0 (M.lookup v m)
+memLookup v m = fromMaybe Z (M.lookup v m)
