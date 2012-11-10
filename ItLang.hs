@@ -95,8 +95,8 @@ execProg (x:xs) m = execProg xs (execStmt x m)
 ------------------------------------------------------------
 execRepeat :: Nat -> Stmt -> Mem -> Mem
 execRepeat Z _ mem = mem
-execRepeat n st mem = execRepeat minus1 st $ execStmt st mem where
-  minus1 = (evalExp (Minus (Lit n) (Lit (S Z))) mem)
+execRepeat (S n) st mem = execRepeat n st (execStmt st mem)
+
 ------------------------------------------------------------
 
 -- M.insert :: Var -> Nat -> Mem -> Mem
