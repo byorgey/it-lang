@@ -79,16 +79,13 @@ evalBExp (And exp1 exp2) mem = (evalBExp exp1 mem) && (evalBExp exp2 mem)
 execStmt :: Stmt -> Mem -> Mem
 execStmt (Assign v e) m = M.insert v value m where
   value = evalExp e m
-execStmt (Block []) m = m
-execStmt (Block (x:xs)) m = execStmt rest cur where
-  rest = Block xs
-  cur = execStmt x m
+execStmt (Block p) m = execProg p m
 execStmt (If bexp s1 s2) m
   | evalBExp bexp m = execStmt s1 m
   | otherwise = execStmt s2 m
 execStmt (Repeat e s) m = execRepeat repeatTimes s m where
   repeatTimes = evalExp e m
-                            
+
 ------------------------------------------------------------
 
 execProg :: Prog -> Mem -> Mem
